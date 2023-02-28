@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy import UUID
 
-from app import db
+from extensions import db
 
 
 class Vehicle(db.Model):
