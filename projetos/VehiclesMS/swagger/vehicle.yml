@@ -1,0 +1,158 @@
+openapi: 3.0.1
+info:
+  title: flask-apispec
+  version: v1
+servers:
+- url: /
+paths:
+  /vehicles/:
+    get:
+      tags:
+      - vehicles
+      description: Get all vehicles
+      responses:
+        default:
+          description: ""
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+    post:
+      tags:
+      - vehicles
+      description: Create a new vehicle
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+        required: false
+      responses:
+        default:
+          description: ""
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+      x-codegen-request-body-name: body
+    options:
+      tags:
+      - vehicles
+      description: Create a new vehicle
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+        required: false
+      responses:
+        default:
+          description: ""
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+      x-codegen-request-body-name: body
+  /vehicles/{vehicle_id}:
+    get:
+      tags:
+      - vehicles
+      description: Get a single vehicle
+      parameters:
+      - name: vehicle_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: ""
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+    put:
+      tags:
+      - vehicles
+      description: Update an existing vehicle
+      parameters:
+      - name: vehicle_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+        required: false
+      responses:
+        default:
+          description: ""
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+      x-codegen-request-body-name: body
+    options:
+      tags:
+      - vehicles
+      description: Update an existing vehicle
+      parameters:
+      - name: vehicle_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+        required: false
+      responses:
+        default:
+          description: ""
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    Vehicle:
+      required:
+      - color
+      - customer_id
+      - driver_id
+      - number_plate
+      - telemetry_profile_id
+      - vin
+      type: object
+      properties:
+        color:
+          maxLength: 50
+          type: string
+        customer_id:
+          maxLength: 36
+          type: string
+        driver_id:
+          maxLength: 36
+          type: string
+        id:
+          type: integer
+        number_plate:
+          maxLength: 50
+          type: string
+        telemetry_profile_id:
+          maxLength: 36
+          type: string
+        vin:
+          maxLength: 50
+          type: string
