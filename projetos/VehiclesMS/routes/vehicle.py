@@ -6,10 +6,12 @@ from marshmallow import fields
 from extensions import db
 from models.vehicle import Vehicle
 from schemas.vehicle import VehicleSchema
+from services.DriverService import DriverService
 from services.TelemetryService import TelemetryService
 
 vehicles_bp = Blueprint("vehicles", __name__, url_prefix="/vehicles")
 telemetry_service = TelemetryService()
+driver_service = DriverService()
 
 
 @vehicles_bp.route('/<int:vehicle_id>', methods=['GET'])
@@ -37,11 +39,15 @@ def get_all_vehicles():
 @marshal_with(VehicleSchema)
 def create_vehicle(**kwargs):
     vehicle = Vehicle(**kwargs)
-    telemetry_profile_id = vehicle.telemetry_profile_id
-    if not telemetry_service.check_if_telemetry_id_is_valid(telemetry_profile_id):
+    if not telemetry_service.check_if_telemetry_id_is_valid(vehicle.telemetry_profile_id):
         return Response(
             "Telemetry Profile Not Found",
             status=404,
+        )
+    if not driver_service.check_if_driver_id_is_valid(vehicle.driver_id):
+        return Response(
+            "Driver Not Found",
+            status=404
         )
     db.session.add(vehicle)
     db.session.commit()
