@@ -7,7 +7,7 @@ from routes.vehicle import register_routes
 
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@postgres_vehicles:5432/vehicle'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/vehicle'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
