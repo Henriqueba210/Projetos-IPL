@@ -14,9 +14,8 @@ telemetry_service = TelemetryService()
 driver_service = DriverService()
 
 
-@vehicles_bp.route('/<int:vehicle_id>', methods=['GET'])
+@vehicles_bp.route('/<string:vehicle_id>', methods=['GET'])
 @doc(tags=['vehicles'], description='Get a single vehicle')
-@use_kwargs({'vehicle_id': fields.Int()}, location='view_args')
 @marshal_with(VehicleSchema)
 def get_vehicle(vehicle_id):
     vehicle = Vehicle.query.filter_by(id=vehicle_id).first()
@@ -54,7 +53,7 @@ def create_vehicle(**kwargs):
     return vehicle
 
 
-@vehicles_bp.route('/<int:vehicle_id>', methods=['PUT'])
+@vehicles_bp.route('/<string:vehicle_id>', methods=['PUT'])
 @doc(tags=['vehicles'], description='Update an existing vehicle')
 @use_kwargs(VehicleSchema)
 @marshal_with(VehicleSchema)
