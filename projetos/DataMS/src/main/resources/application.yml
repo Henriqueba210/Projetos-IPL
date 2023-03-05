@@ -19,3 +19,9 @@ spring:
     password: guest
     virtual-host: /
     queue-name: tracking-exchange
+
+clients:
+  vehicles:
+    base_path: http://localhost:8081
+  telemetry_profile:
+    base_path: http://localhost:8082

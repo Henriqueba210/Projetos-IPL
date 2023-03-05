@@ -1,0 +1,13 @@
+# Build the application using Gradle
+FROM gradle:jdk17 as builder
+WORKDIR /app
+COPY . .
+RUN ./gradlew build
+
+# Use OpenJDK 11 JRE slim as the base image
+FROM openjdk:17-alpine
+
+COPY target/*.jar /app/app.jar
+WORKDIR /app
+
+CMD ["java", "-jar", "telemetryMS.jar"]

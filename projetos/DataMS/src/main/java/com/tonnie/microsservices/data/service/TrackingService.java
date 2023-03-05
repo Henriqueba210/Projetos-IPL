@@ -19,6 +19,10 @@ public class TrackingService {
         return trackingRepository.findById(id);
     }
 
+    public List<Tracking> getTrackingByVehicleId(String idVehicle) { return trackingRepository.findByIdVehicle(idVehicle); }
+
+    public List<Tracking> getTrackingByTelemetryProfileId(String idTelemetryProfile) { return trackingRepository.findByIdTelemetryProfile(idTelemetryProfile); }
+
     public List<Tracking> getAllTrackings() {
         return trackingRepository.findAll();
     }

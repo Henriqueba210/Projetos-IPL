@@ -1,7 +1,6 @@
 # Build the application using Gradle
-FROM openjdk:17-jdk-slim-buster as builder
-RUN apt-get update -y
-RUN apt-get install -y binutils
+FROM maven:jdk17 as builder
+WORKDIR /app
 COPY . .
 RUN ./mvnw install
 

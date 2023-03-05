@@ -242,3 +242,5 @@ cython_debug/
 projetos/DataMS/db-data/
 
 projetos/VehiclesMS/db-data/
+
+db-data/

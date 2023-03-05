@@ -1,0 +1,148 @@
+version: "3.5"
+networks:
+  ipl:
+    driver: bridge
+
+services:
+  ipl-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ipl-rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+    - "5672:5672"
+    - "15672:15672"
+    networks:
+      - ipl
+
+  postgres_tracking:
+    image: postgres:14-alpine
+    container_name: postgres_tracking
+    restart: always
+    environment:
+      - POSTGRES_DB=tracking
+      - POSTGRES_USER=tracking
+      - POSTGRES_PASSWORD=tracking
+    volumes:
+      - ./db-data/tracking/:/var/lib/postgresql/data/
+    ports:
+      - "5430:5432"
+    networks:
+      - ipl
+
+  postgres_vehicles:
+    image: postgres:14-alpine
+    container_name: postgres_vehicles
+    restart: always
+    environment:
+        - POSTGRES_DB=vehicle
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./db-data/vehicles/:/var/lib/postgresql/data/
+    ports:
+      - "5431:5432"
+    networks:
+      - ipl
+
+  postgres_people:
+    image: postgres:14-alpine
+    container_name: postgres_people
+    restart: always
+    environment:
+      - POSTGRES_DB=people
+      - POSTGRES_USER=people
+      - POSTGRES_PASSWORD=people
+    volumes:
+      - ./db-data/people:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    networks:
+      - ipl
+
+  postgres_telemetry:
+    image: postgres:14-alpine
+    container_name: postgres_telemetry
+    restart: always
+    environment:
+      - POSTGRES_DB=telemetry
+      - POSTGRES_USER=telemetry
+      - POSTGRES_PASSWORD=telemetry
+    volumes:
+      - ./db-data/telemetry:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432"
+    networks:
+      - ipl
+
+  tracking:
+    image: tracking
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tracking
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_tracking:5432/tracking
+      - SPRING_DATASOURCE_USERNAME=tracking
+      - SPRING_DATASOURCE_PASSWORD=tracking
+      - SPRING_RABBITMQ_HOST=ipl-rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=user
+      - SPRING_RABBITMQ_PASSWORD=password
+      - SPRING_RABBITMQ_QUEUE_NAME=tracking-exchange
+    depends_on:
+      - ipl-rabbitmq
+      - postgres_tracking
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - ipl
+
+  vehicles:
+    depends_on:
+      - postgres_vehicles
+    build:
+      context: ./projetos/VehiclesMS
+      dockerfile: Dockerfile
+    entrypoint: ./projetos/VehiclesMS/entrypoint.sh
+    ports:
+      - "5000:5000"
+    networks:
+      - ipl
+
+  telemetry:
+    image: telemetry
+    container_name: telemetry
+    build:
+      context: ./projetos/telemetry
+      dockerfile: Dockerfile
+    depends_on:
+      - ipl-rabbitmq
+      - postgres_telemetry
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_telemetry:5432/telemetry
+      - SPRING_DATASOURCE_USERNAME=telemetry
+      - SPRING_DATASOURCE_PASSWORD=telemetry
+    ports:
+      - "8081:8080"
+    networks:
+      - ipl
+
+  people:
+    image: people
+    container_name: people
+    build:
+      context: ./projetos/XptoTracking-PeopleMS
+      dockerfile: Dockerfile
+    depends_on:
+      - ipl-rabbitmq
+      - postgres_people
+    restart: always
+    ports:
+      - "8082:8080"
+    networks:
+      - ipl

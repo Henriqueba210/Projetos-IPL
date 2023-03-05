@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/trackings")
@@ -28,17 +27,29 @@ public class TrackingController {
         this.trackingMapper = trackingMapper;
         this.trackingPublisher = trackingPublisher;
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<TrackingDto> getTrackingById(@PathVariable("id") UUID id) {
         Optional<Tracking> tracking = trackingService.getTrackingById(id);
         return tracking.map(value -> ResponseEntity.ok(trackingMapper.toDto(value))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/vehicle/{vehicleId}/tracking")
+    public ResponseEntity<List<TrackingDto>> getVehicleTracking(@PathVariable("vehicleId") String vehicleId) {
+        List<TrackingDto> trackingDTOs = trackingService.getTrackingByVehicleId(vehicleId).stream().map(trackingMapper::toDto).toList();
+        return ResponseEntity.ok(trackingDTOs);
+    }
+
+    @GetMapping("/telemetry-profile/{idTelemetryProfile}")
+    public ResponseEntity<List<TrackingDto>> getTrackingByTelemetryProfile(@PathVariable String idTelemetryProfile) {
+        List<TrackingDto> trackings = trackingService.getTrackingByTelemetryProfileId(idTelemetryProfile).stream().map(trackingMapper::toDto).toList();
+        return ResponseEntity.ok(trackings);
+    }
+
     @GetMapping
     public ResponseEntity<List<TrackingDto>> getAllTrackings() {
         List<Tracking> trackings = trackingService.getAllTrackings();
-        List<TrackingDto> trackingDtos = trackings.stream().map(trackingMapper::toDto).collect(Collectors.toList());
+        List<TrackingDto> trackingDtos = trackings.stream().map(trackingMapper::toDto).toList();
         return ResponseEntity.ok(trackingDtos);
     }
 

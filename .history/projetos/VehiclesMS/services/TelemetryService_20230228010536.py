@@ -5,7 +5,7 @@ from clients.ipl_tracking_microservice_api_client.api.telemetry_profile import g
 
 
 class TelemetryService:
-    client = client.Client(base_url='http://telemetry:8080/tracking')
+    client = client.Client(base_url='http://localhost:8080/tracking')
 
     def check_if_telemetry_id_is_valid(self, telemetry_id: str) -> bool:
         """

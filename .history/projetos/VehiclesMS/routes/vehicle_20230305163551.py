@@ -43,11 +43,11 @@ def create_vehicle(**kwargs):
             "Telemetry Profile Not Found",
             status=404,
         )
-    if not driver_service.check_if_driver_id_is_valid(vehicle.driver_id):
-        return Response(
-            "Driver Not Found",
-            status=404
-        )
+    # if not driver_service.check_if_driver_id_is_valid(vehicle.driver_id):
+    #     return Response(
+    #         "Driver Not Found",
+    #         status=404
+    #     )
     db.session.add(vehicle)
     db.session.commit()
     return vehicle

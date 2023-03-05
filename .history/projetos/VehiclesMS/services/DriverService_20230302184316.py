@@ -5,7 +5,7 @@ from clients.ipl_tracking_microservice_api_client.api.driver import get_driver
 
 
 class DriverService:
-    client = client.Client(base_url='http://people:8080/tracking')
+    client = client.Client(base_url='http://localhost:8081/tracking')
 
     def check_if_driver_id_is_valid(self, driver_id: str) -> bool:
         """
