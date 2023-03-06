@@ -16,6 +16,6 @@ public class TrackingPublisher implements ITrackingPublisher {
 
     @Override
     public void publishTracking(TrackingDto tracking) {
-        rabbitTemplate.convertAndSend("tracking-exchange", "tracking.new", tracking);
+        rabbitTemplate.convertAndSend("tracking-direct-exchange", "tracking.new", tracking);
     }
 }

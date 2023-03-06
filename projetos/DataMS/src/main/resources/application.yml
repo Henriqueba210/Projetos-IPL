@@ -22,6 +22,6 @@ spring:
 
 clients:
   vehicles:
-    base_path: http://localhost:8081
+    base_path: "${env:CLIENTS_VEHICLES_BASE_PATH:http://localhost:5000}"
   telemetry_profile:
-    base_path: http://localhost:8082
+    base_path: "${env:CLIENTS_TELEMETRY_PROFILE_BASE_PATH:http://localhost:8081}"

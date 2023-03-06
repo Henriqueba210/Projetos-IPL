@@ -1,0 +1,113 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /api/tracking:
+    get:
+      tags:
+        - tracking-controller
+      operationId: getAllTrackings
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrackingDto'
+    post:
+      tags:
+        - tracking-controller
+      operationId: createTracking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackingDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+  /api/tracking/{id}:
+    get:
+      tags:
+        - tracking-controller
+      operationId: getTrackingById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TrackingDto'
+  /api/tracking/vehicle/{vehicleId}:
+    get:
+      tags:
+        - tracking-controller
+      operationId: getVehicleTracking
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrackingDto'
+  /api/tracking/telemetry-profile/{idTelemetryProfile}:
+    get:
+      tags:
+        - tracking-controller
+      operationId: getTrackingByTelemetryProfile
+      parameters:
+        - name: idTelemetryProfile
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrackingDto'
+components:
+  schemas:
+    TrackingDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        idVehicle:
+          type: string
+        idTelemetryProfile:
+          type: string
+        date:
+          type: string
+          format: date-time
+        latitude:
+          type: string
+        longitude:
+          type: string

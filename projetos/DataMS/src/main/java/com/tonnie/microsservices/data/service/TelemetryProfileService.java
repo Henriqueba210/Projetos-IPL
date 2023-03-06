@@ -4,19 +4,21 @@ import com.tonnie.microsservices.ApiClient;
 import com.tonnie.microsservices.ApiException;
 import com.tonnie.microsservices.Configuration;
 import com.tonnie.microsservices.api.TelemetryProfileApi;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TelemetryProfileService {
-    private final TelemetryProfileApi telemetryProfileApi;
+    private TelemetryProfileApi telemetryProfileApi;
 
     @Value("${clients.telemetry_profile.base_path}")
-    private static final String BASE_PATH = "";
+    private String base_path;
 
-    TelemetryProfileService() {
+    @PostConstruct
+    void init() {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath(BASE_PATH);
+        defaultClient.setBasePath(base_path);
         this.telemetryProfileApi = new TelemetryProfileApi(defaultClient);
     }
 

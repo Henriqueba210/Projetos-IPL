@@ -92,6 +92,8 @@ services:
       - SPRING_RABBITMQ_USERNAME=user
       - SPRING_RABBITMQ_PASSWORD=password
       - SPRING_RABBITMQ_QUEUE_NAME=tracking-exchange
+      - CLIENTS_VEHICLES_BASE_PATH=http://vehicles:5000
+      - CLIENTS_TELEMETRY_PROFILE_BASE_PATH=http://telemetry:8080
     depends_on:
       - ipl-rabbitmq
       - postgres_tracking
@@ -102,6 +104,8 @@ services:
       - ipl
 
   vehicles:
+    container_name: vehicles
+    image: vehicles
     depends_on:
       - postgres_vehicles
     build:

@@ -4,21 +4,25 @@ import com.tonnie.microsservices.ApiClient;
 import com.tonnie.microsservices.ApiException;
 import com.tonnie.microsservices.Configuration;
 import com.tonnie.microsservices.api.VehiclesApi;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
+@PropertySource("classpath:application.yml")
 public class VehicleService {
-    private final VehiclesApi vehicleAPI;
+    private VehiclesApi vehicleAPI;
 
     @Value("${clients.vehicles.base_path}")
-    private static final String BASE_PATH = "";
+    private String base_path;
 
-    VehicleService() {
+    @PostConstruct
+    void init() {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath(BASE_PATH);
+        defaultClient.setBasePath(base_path);
         this.vehicleAPI = new VehiclesApi(defaultClient);
     }
 
