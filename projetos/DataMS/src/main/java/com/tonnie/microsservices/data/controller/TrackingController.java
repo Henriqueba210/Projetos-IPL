@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/trackings")
+@RequestMapping("/api/tracking")
 public class TrackingController {
 
     private final TrackingService trackingService;
@@ -34,7 +34,7 @@ public class TrackingController {
         return tracking.map(value -> ResponseEntity.ok(trackingMapper.toDto(value))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/vehicle/{vehicleId}/tracking")
+    @GetMapping("/vehicle/{vehicleId}")
     public ResponseEntity<List<TrackingDto>> getVehicleTracking(@PathVariable("vehicleId") String vehicleId) {
         List<TrackingDto> trackingDTOs = trackingService.getTrackingByVehicleId(vehicleId).stream().map(trackingMapper::toDto).toList();
         return ResponseEntity.ok(trackingDTOs);

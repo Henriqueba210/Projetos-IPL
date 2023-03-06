@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/tracking
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5430/tracking
+    username: tracking
+    password: tracking
   jpa:
     hibernate:
       ddl-auto: validate
@@ -15,8 +15,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: guest
-    password: guest
+    username: user
+    password: password
     virtual-host: /
     queue-name: tracking-exchange
 
